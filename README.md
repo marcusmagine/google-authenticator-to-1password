@@ -1,14 +1,18 @@
-# Migrate Google Authenticator OTPs to 1Password on macOS
+# Bulk Import Google Authenticator OTPs into 1Password
 
-Bulk-import Google Authenticator accounts into 1Password by taking screenshots
-of the export QR codes and processing them locally on a Mac.
+Import many Google Authenticator accounts into 1Password in one run. Export all
+accounts, screenshot each QR-code page into a folder, preview the decoded
+accounts, then create the 1Password Login items in bulk.
+
+The main benefit of this project is avoiding the manual workflow of scanning
+and creating every OTP entry individually.
 
 > [!WARNING]
 > The screenshots contain live OTP secrets. Run this only on a trusted Mac,
 > never upload or commit the screenshots, and delete them after verification.
 > See [SECURITY.md](SECURITY.md).
 
-## The Simple Flow
+## Bulk Import at a Glance
 
 1. Export all accounts from Google Authenticator.
 2. Take one screenshot of every export QR-code page.
@@ -30,8 +34,9 @@ of the export QR codes and processing them locally on a Mac.
      --apply
    ```
 
-The importer creates one new 1Password Login item per OTP and tags it
-`google-authenticator-import`. It does not modify existing Login items.
+The bulk importer decodes every screenshot locally, creates one new 1Password
+Login item per OTP, and tags each item `google-authenticator-import`. It does
+not modify existing Login items.
 
 After importing, verify the OTP codes, merge them into existing Login items
 where appropriate, and only then remove the originals from Google
@@ -102,7 +107,7 @@ op signin
 op whoami
 ```
 
-## Run the Migration
+## Run the Bulk Import
 
 ### 1. Export and Screenshot
 
@@ -142,7 +147,7 @@ Confirm:
 
 No 1Password items are created during preview.
 
-### 3. Import
+### 3. Bulk Import
 
 When the preview is correct:
 
@@ -180,10 +185,10 @@ and a complete retry can create duplicates.
 - Recovery codes should be stored securely before removing Google
   Authenticator entries.
 
-## Manual Alternative
+## Manual Fallback
 
-To process one migration link manually instead of importing a screenshot
-folder:
+The bulk screenshot-folder workflow above is the intended use of this project.
+To process one migration link manually instead:
 
 ```bash
 otpauth.sh --prompt-http
