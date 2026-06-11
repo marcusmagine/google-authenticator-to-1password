@@ -69,6 +69,7 @@ The separate `dim13/otpauth` release contains the upstream executable named
 - macOS
 - The device containing the Google Authenticator accounts
 - 1Password for Mac and [1Password CLI](https://developer.1password.com/docs/cli/)
+  v2 or newer
 - Node.js, any recent supported version
 - `jq`:
 

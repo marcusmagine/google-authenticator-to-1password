@@ -7,6 +7,7 @@ readonly JSON_HELPER="${SCRIPT_DIR}/otpauth-to-1password-json.js"
 readonly QR_DECODER="${SCRIPT_DIR}/decode-qr-folder.swift"
 readonly OTPAUTH_BIN="${OTPAUTH_BIN:-/usr/local/otpauth/otpauth}"
 readonly IMPORT_TAG="google-authenticator-import"
+export IMPORT_TAG
 
 apply=false
 vault=""
@@ -67,6 +68,14 @@ for command_name in node jq op; do
   fi
 done
 
+op_major_version="$(op --version | cut -d. -f1)"
+if [[ ! "${op_major_version}" =~ ^[0-9]+$ ]] || (( op_major_version < 2 )); then
+  printf 'Error: 1Password CLI v2 or newer is required; found: %s\n' \
+    "$(op --version)" >&2
+  exit 1
+fi
+unset op_major_version
+
 if [[ -n "${qr_folder}" ]]; then
   if [[ ! -x "${QR_DECODER}" ]]; then
     printf 'Error: %s is missing or not executable.\n' "${QR_DECODER}" >&2
@@ -90,7 +99,7 @@ total=0
 
 process_migration_link() {
   local migration_link="$1"
-  local decoded metadata title username otp_url
+  local decoded item_json metadata title username otp_url
 
   if [[ "${migration_link}" != otpauth-migration://offline\?data=* ]]; then
     printf 'Error: input is not a Google Authenticator migration link.\n' >&2
@@ -108,14 +117,35 @@ process_migration_link() {
     username="$(printf '%s' "${metadata}" | jq -r '.username')"
     total=$((total + 1))
 
-    if [[ "${apply}" == true ]]; then
+    if ! item_json="$(
       printf '%s' "${otp_url}" |
-        IMPORT_TAG="${IMPORT_TAG}" node "${JSON_HELPER}" |
-        op item create --vault "${vault}" - >/dev/null
+        node "${JSON_HELPER}"
+    )"; then
+      printf 'Error: could not generate 1Password item JSON for: %s [%s]\n' \
+        "${title}" "${username}" >&2
+      exit 1
+    fi
+
+    if ! printf '%s' "${item_json}" | jq -e . >/dev/null; then
+      printf 'Error: generated invalid 1Password item JSON for: %s [%s]\n' \
+        "${title}" "${username}" >&2
+      exit 1
+    fi
+
+    if [[ "${apply}" == true ]]; then
+      if ! printf '%s' "${item_json}" |
+        op item create --vault "${vault}" - >/dev/null; then
+        printf 'Error: 1Password could not create item: %s [%s]\n' \
+          "${title}" "${username}" >&2
+        exit 1
+      fi
+
       printf 'Created: %s [%s]\n' "${title}" "${username}"
     else
       printf 'Would create: %s [%s]\n' "${title}" "${username}"
     fi
+
+    unset item_json
   done <<< "${decoded}"
 
   unset decoded
