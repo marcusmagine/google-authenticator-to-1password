@@ -14,7 +14,8 @@ and creating every OTP entry individually.
 
 ## Bulk Import at a Glance
 
-1. Export all accounts from Google Authenticator.
+1. In the Google Authenticator mobile app, open the transfer/export function,
+   select every account, and generate the export QR-code pages.
 2. Take one screenshot of every export QR-code page.
 3. Put the screenshots in one folder on the Mac.
 4. Preview the accounts that will be created:
@@ -111,23 +112,39 @@ op whoami
 
 ### 1. Export and Screenshot
 
-1. In Google Authenticator, open **Transfer accounts** or
-   **Transfer codes**.
-2. Select **Export accounts** and select all accounts.
-3. Google Authenticator may show several sequential QR-code pages.
-4. Take exactly one screenshot of every page.
-5. Transfer the screenshots into a dedicated folder, for example:
+On the phone or tablet that currently contains the OTP accounts:
 
-   ```text
-   ~/Desktop/ga-export/
-     export-01.png
-     export-02.png
-     export-03.png
-   ```
+1. Open the **Google Authenticator** app.
+2. Open the app menu. Depending on the app version, this may be the menu icon
+   or the three-dot **More** menu.
+3. Select **Transfer accounts** or **Transfer codes**.
+4. Select **Export accounts**.
+5. Authenticate with the device PIN, fingerprint, or face recognition if
+   prompted.
+6. Select every account you want to migrate, then select **Next** or
+   **Export**.
+7. Google Authenticator displays the first export QR-code page. Take a
+   screenshot before advancing.
+8. If the app shows another QR-code page, advance to it and take exactly one
+   screenshot. Continue until every page has been captured.
+
+Exporting copies the OTP secrets into the QR codes. It does not remove the
+accounts from Google Authenticator.
+
+Transfer the screenshots to a dedicated folder on the Mac and give them names
+that preserve their order, for example:
+
+```text
+~/Desktop/ga-export/
+  export-01.png
+  export-02.png
+  export-03.png
+```
 
 The folder decoder supports HEIC, JPEG, PNG, and TIFF. It uses Apple's local
 Vision framework and does not upload the images. Duplicate QR screenshots cause
-an error.
+an error. If the mobile device prevents screenshots, photograph each QR-code
+page with another trusted device and transfer those images to the folder.
 
 ### 2. Preview
 
