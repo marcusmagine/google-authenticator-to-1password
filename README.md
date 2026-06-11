@@ -47,6 +47,23 @@ Authenticator.
 
 ## One-Time Setup
 
+### Get This Project
+
+Clone this repository and run the remaining commands from its directory:
+
+```bash
+git clone https://github.com/marcusmagine/google-authenticator-to-1password.git
+cd google-authenticator-to-1password
+```
+
+This repository contains:
+
+- `otpauth-bulk-import.sh`: the bulk importer used by this guide.
+- `otpauth.sh`: an optional wrapper used only by the manual fallback.
+
+The separate `dim13/otpauth` release contains the upstream executable named
+`otpauth`. It does **not** contain `otpauth.sh`.
+
 ### Requirements
 
 - macOS
@@ -89,13 +106,19 @@ mkdir -p /tmp/otpauth-install
 tar -xzf "$HOME/Downloads/$OTPAUTH_ASSET" -C /tmp/otpauth-install
 sudo install -d -m 0755 /usr/local/otpauth
 sudo install -m 0755 /tmp/otpauth-install/otpauth /usr/local/otpauth/otpauth
-sudo install -m 0755 ./otpauth.sh /usr/local/bin/otpauth.sh
 ```
 
-Confirm it works:
+Confirm the upstream binary required by the bulk importer works:
 
 ```bash
-otpauth.sh -h
+/usr/local/otpauth/otpauth -h
+```
+
+The bulk-import workflow is now ready. Installing `otpauth.sh` is optional and
+only needed for the [manual fallback](#manual-fallback):
+
+```bash
+sudo install -m 0755 ./otpauth.sh /usr/local/bin/otpauth.sh
 ```
 
 ### Activate 1Password CLI
