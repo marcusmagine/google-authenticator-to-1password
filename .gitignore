@@ -1,0 +1,20 @@
+# OTP export material and generated secrets
+ga-export/
+otp-export/
+migration.bin
+*.otpauth
+*.otp-export.json
+*.otp-export.csv
+
+# Generated QR images
+otpauth-migration*.png
+qr-export/
+images/
+
+# macOS and editors
+.DS_Store
+.idea/
+.vscode/
+
+# Dependencies
+node_modules/
