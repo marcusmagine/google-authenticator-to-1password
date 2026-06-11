@@ -17,7 +17,9 @@ and creating every OTP entry individually.
 1. In the Google Authenticator mobile app, open the transfer/export function,
    select every account, and generate the export QR-code pages.
 2. Take one screenshot of every export QR-code page.
-3. Put the screenshots in one folder on the Mac.
+3. Put the screenshots in one folder on the Mac, for example
+   `~/Desktop/ga-export`, and name them in QR-page order:
+   `export-1.png`, `export-2.png`, `export-3.png`.
 4. Preview the accounts that will be created:
 
    ```bash
@@ -136,9 +138,9 @@ that preserve their order, for example:
 
 ```text
 ~/Desktop/ga-export/
-  export-01.png
-  export-02.png
-  export-03.png
+  export-1.png
+  export-2.png
+  export-3.png
 ```
 
 The folder decoder supports HEIC, JPEG, PNG, and TIFF. It uses Apple's local
